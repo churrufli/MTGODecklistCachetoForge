@@ -24,6 +24,8 @@ Public Class Form1
             MsgBox("Select Format")
             Exit Function
         End If
+        'busco en la carpeta de los mazos
+        'COPIO DE AQUI HASTA AQUI
 
         Dim OriginFolder = IO.Directory.GetCurrentDirectory & "\Forge Tournaments Decks"
         Dim DestinyFolder = IO.Directory.GetCurrentDirectory & "\Forge Tournaments Decks Zipped"
@@ -40,6 +42,9 @@ Public Class Form1
 
             Dim dirName = New DirectoryInfo(d).Name
             Dim fn = DestinyFolder & "\" & dirName
+            If Not Directory.Exists(fn) Then
+                ' Directory.CreateDirectory(fn)
+            End If
 
             Dim getmonths() = Directory.GetDirectories(OriginFolder & "\" & ComboBox1.SelectedItem & "\" & dirName)
 
@@ -47,6 +52,9 @@ Public Class Form1
                 Dim dirName2 = New DirectoryInfo(mymonth).Name
                 Dim fm = fn & "\" & dirName2
 
+                If Not Directory.Exists(fm) Then
+                    'Directory.CreateDirectory(fm)
+                End If
 
                 Dim getdays() = Directory.GetDirectories(mymonth)
                 If Not Directory.Exists("Forge Tournaments Decks Zipped\" & ComboBox1.SelectedItem) Then
@@ -235,6 +243,10 @@ Public Class Form1
 
 
                                     contador = contador + 1
+
+
+
+
 
                                 Next i
                             End If
@@ -757,8 +769,12 @@ Public Class Form1
 
     Private Sub btnzipdecks_Click(sender As Object, e As EventArgs) Handles btnzipdecks.Click
         zipdecks()
+
     End Sub
 
+    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+    End Sub
 
     Public Shared Sub compressDirectory(ByVal DirectoryPath As String, ByVal OutputFilePath As String, ByVal Optional CompressionLevel As Integer = 9)
         Try
@@ -791,6 +807,10 @@ Public Class Form1
         Catch ex As Exception
             Console.WriteLine("Exception during processing {0}", ex)
         End Try
+    End Sub
+
+    Private Sub OptionsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OptionsToolStripMenuItem.Click
+
     End Sub
 
     Private Sub CheckForANewVersionToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CheckForANewVersionToolStripMenuItem.Click
