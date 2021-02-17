@@ -26,13 +26,17 @@ Partial Class Form1
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
-        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
+        Me.cmbformat = New System.Windows.Forms.ComboBox()
         Me.btnzipdecks = New System.Windows.Forms.Button()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckForANewVersionToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Button2 = New System.Windows.Forms.Button()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.cmbyear = New System.Windows.Forms.ComboBox()
+        Me.chkoverwrite = New System.Windows.Forms.CheckBox()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -65,14 +69,13 @@ Partial Class Form1
         Me.Button3.Text = "Extract Decks"
         Me.Button3.UseVisualStyleBackColor = True
         '
-        'ComboBox1
+        'cmbformat
         '
-        Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {"standard", "modern", "vintage", "legacy", "pauper", "pioneer"})
-        Me.ComboBox1.Location = New System.Drawing.Point(12, 32)
-        Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(121, 24)
-        Me.ComboBox1.TabIndex = 33
+        Me.cmbformat.FormattingEnabled = True
+        Me.cmbformat.Location = New System.Drawing.Point(79, 32)
+        Me.cmbformat.Name = "cmbformat"
+        Me.cmbformat.Size = New System.Drawing.Size(121, 24)
+        Me.cmbformat.TabIndex = 33
         '
         'btnzipdecks
         '
@@ -89,7 +92,7 @@ Partial Class Form1
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OptionsToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(906, 28)
+        Me.MenuStrip1.Size = New System.Drawing.Size(906, 30)
         Me.MenuStrip1.TabIndex = 35
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -97,7 +100,7 @@ Partial Class Form1
         '
         Me.OptionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CheckForANewVersionToolStripMenuItem})
         Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
-        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(75, 24)
+        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(75, 26)
         Me.OptionsToolStripMenuItem.Text = "Options"
         '
         'CheckForANewVersionToolStripMenuItem
@@ -126,20 +129,62 @@ Partial Class Form1
         Me.Button2.Text = "Generate list.txt"
         Me.Button2.UseVisualStyleBackColor = True
         '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(22, 36)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(52, 17)
+        Me.Label2.TabIndex = 38
+        Me.Label2.Text = "Format"
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(206, 35)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(38, 17)
+        Me.Label3.TabIndex = 40
+        Me.Label3.Text = "Year"
+        '
+        'cmbyear
+        '
+        Me.cmbyear.FormattingEnabled = True
+        Me.cmbyear.Items.AddRange(New Object() {"standard", "modern", "vintage", "legacy", "pauper", "pioneer"})
+        Me.cmbyear.Location = New System.Drawing.Point(247, 32)
+        Me.cmbyear.Name = "cmbyear"
+        Me.cmbyear.Size = New System.Drawing.Size(121, 24)
+        Me.cmbyear.TabIndex = 39
+        '
+        'chkoverwrite
+        '
+        Me.chkoverwrite.AutoSize = True
+        Me.chkoverwrite.Location = New System.Drawing.Point(391, 36)
+        Me.chkoverwrite.Name = "chkoverwrite"
+        Me.chkoverwrite.Size = New System.Drawing.Size(169, 21)
+        Me.chkoverwrite.TabIndex = 41
+        Me.chkoverwrite.Text = "Overwrite files if exists"
+        Me.chkoverwrite.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(906, 533)
+        Me.Controls.Add(Me.chkoverwrite)
+        Me.Controls.Add(Me.Label3)
+        Me.Controls.Add(Me.cmbyear)
+        Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Controls.Add(Me.btnzipdecks)
-        Me.Controls.Add(Me.ComboBox1)
+        Me.Controls.Add(Me.cmbformat)
         Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.log)
         Me.Name = "Form1"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "MTGODecklistCachetoForge"
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
@@ -151,11 +196,15 @@ Partial Class Form1
     Friend WithEvents FolderBrowserDialog1 As FolderBrowserDialog
     Friend WithEvents Button1 As Button
     Friend WithEvents Button3 As Button
-    Friend WithEvents ComboBox1 As ComboBox
+    Friend WithEvents cmbformat As ComboBox
     Friend WithEvents btnzipdecks As Button
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents OptionsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents CheckForANewVersionToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents Label1 As Label
     Friend WithEvents Button2 As Button
+    Friend WithEvents Label2 As Label
+    Friend WithEvents Label3 As Label
+    Friend WithEvents cmbyear As ComboBox
+    Friend WithEvents chkoverwrite As CheckBox
 End Class
