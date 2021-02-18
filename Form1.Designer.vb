@@ -55,7 +55,7 @@ Partial Class Form1
         '
         Me.Button1.Location = New System.Drawing.Point(458, 473)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(192, 30)
+        Me.Button1.Size = New System.Drawing.Size(199, 30)
         Me.Button1.TabIndex = 31
         Me.Button1.Text = "Create Gauntlets with Decks"
         Me.Button1.UseVisualStyleBackColor = True
@@ -92,7 +92,7 @@ Partial Class Form1
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OptionsToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(906, 30)
+        Me.MenuStrip1.Size = New System.Drawing.Size(906, 28)
         Me.MenuStrip1.TabIndex = 35
         Me.MenuStrip1.Text = "MenuStrip1"
         '

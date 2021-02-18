@@ -863,11 +863,12 @@ Public Class Form1
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+
         generatelist()
     End Sub
 
     Sub generatelist()
-        If cmbformat.SelectedItem = Nothing Then
+        If cmbformat.SelectedItem.value.ToString = "" Then
             MsgBox("Select Format")
             Exit Sub
         End If
@@ -882,11 +883,11 @@ Public Class Form1
             Directory.CreateDirectory(DestinyFolder)
         End If
 
-        Dim filenames As String() = Directory.GetFiles(OriginFolder & "\" & cmbformat.SelectedItem, "*.zip")
+        Dim filenames As String() = Directory.GetFiles(OriginFolder & "\" & cmbformat.SelectedItem.value.ToString, "*.zip")
         Dim tx = ""
         For Each d In filenames
             Dim nombre = d
-            nombre = Replace(nombre, OriginFolder & "\" & cmbformat.SelectedItem & "\", "")
+            nombre = Replace(nombre, OriginFolder & "\" & cmbformat.SelectedItem.value.ToString & "\", "")
             nombre = Replace(nombre, ".zip", "")
             nombre = Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(nombre)
             Dim comp = Split(nombre, "-")
@@ -896,12 +897,12 @@ Public Class Form1
             eltexto = Replace(eltexto, "-", " ")
             nombre = lafecha & eltexto
             Dim urldelserver As String = d
-            urldelserver = Replace(urldelserver, OriginFolder & "\" & cmbformat.SelectedItem & "\", "")
-            tx = tx & nombre & " | https://downloads.cardforge.org/decks/archive/" & cmbformat.SelectedItem & "/" & urldelserver & vbCrLf
+            urldelserver = Replace(urldelserver, OriginFolder & "\" & cmbformat.SelectedItem.value.ToString & "\", "")
+            tx = tx & nombre & " | https://downloads.cardforge.org/decks/archive/" & cmbformat.SelectedItem.value.ToString & "/" & urldelserver & vbCrLf
         Next
 
 
-        Dim nombredelfichero = "net-decks-archive-" & cmbformat.SelectedItem & ".txt"
+        Dim nombredelfichero = "net-decks-archive-" & cmbformat.SelectedItem.value.ToString & ".txt"
         IO.File.Delete(nombredelfichero)
         IO.File.WriteAllText(nombredelfichero, tx)
         WriteUserLog("Done!")
