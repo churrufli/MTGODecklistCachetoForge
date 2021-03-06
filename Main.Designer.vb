@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class Form1
+Partial Class Main
     Inherits System.Windows.Forms.Form
 
     'Form reemplaza a Dispose para limpiar la lista de componentes.
@@ -34,9 +34,9 @@ Partial Class Form1
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
         Me.cmbyear = New System.Windows.Forms.ComboBox()
         Me.chkoverwrite = New System.Windows.Forms.CheckBox()
+        Me.Label3 = New System.Windows.Forms.Label()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -53,9 +53,9 @@ Partial Class Form1
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(458, 473)
+        Me.Button1.Location = New System.Drawing.Point(664, 473)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(199, 30)
+        Me.Button1.Size = New System.Drawing.Size(217, 30)
         Me.Button1.TabIndex = 31
         Me.Button1.Text = "Create Gauntlets with Decks"
         Me.Button1.UseVisualStyleBackColor = True
@@ -79,7 +79,7 @@ Partial Class Form1
         '
         'btnzipdecks
         '
-        Me.btnzipdecks.Location = New System.Drawing.Point(697, 473)
+        Me.btnzipdecks.Location = New System.Drawing.Point(232, 473)
         Me.btnzipdecks.Name = "btnzipdecks"
         Me.btnzipdecks.Size = New System.Drawing.Size(184, 30)
         Me.btnzipdecks.TabIndex = 34
@@ -100,7 +100,7 @@ Partial Class Form1
         '
         Me.OptionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CheckForANewVersionToolStripMenuItem})
         Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
-        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(75, 26)
+        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(75, 24)
         Me.OptionsToolStripMenuItem.Text = "Options"
         '
         'CheckForANewVersionToolStripMenuItem
@@ -122,9 +122,9 @@ Partial Class Form1
         '
         'Button2
         '
-        Me.Button2.Location = New System.Drawing.Point(225, 473)
+        Me.Button2.Location = New System.Drawing.Point(442, 473)
         Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(184, 30)
+        Me.Button2.Size = New System.Drawing.Size(197, 30)
         Me.Button2.TabIndex = 37
         Me.Button2.Text = "Generate list.txt"
         Me.Button2.UseVisualStyleBackColor = True
@@ -137,15 +137,6 @@ Partial Class Form1
         Me.Label2.Size = New System.Drawing.Size(52, 17)
         Me.Label2.TabIndex = 38
         Me.Label2.Text = "Format"
-        '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(206, 35)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(38, 17)
-        Me.Label3.TabIndex = 40
-        Me.Label3.Text = "Year"
         '
         'cmbyear
         '
@@ -166,7 +157,16 @@ Partial Class Form1
         Me.chkoverwrite.Text = "Overwrite files if exists"
         Me.chkoverwrite.UseVisualStyleBackColor = True
         '
-        'Form1
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(206, 35)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(38, 17)
+        Me.Label3.TabIndex = 40
+        Me.Label3.Text = "Year"
+        '
+        'Main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -183,7 +183,7 @@ Partial Class Form1
         Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.log)
-        Me.Name = "Form1"
+        Me.Name = "Main"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "MTGODecklistCachetoForge"
         Me.MenuStrip1.ResumeLayout(False)
@@ -204,7 +204,7 @@ Partial Class Form1
     Friend WithEvents Label1 As Label
     Friend WithEvents Button2 As Button
     Friend WithEvents Label2 As Label
-    Friend WithEvents Label3 As Label
     Friend WithEvents cmbyear As ComboBox
     Friend WithEvents chkoverwrite As CheckBox
+    Friend WithEvents Label3 As Label
 End Class
