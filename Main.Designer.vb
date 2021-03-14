@@ -37,16 +37,16 @@ Partial Class Main
         Me.cmbyear = New System.Windows.Forms.ComboBox()
         Me.chkoverwrite = New System.Windows.Forms.CheckBox()
         Me.Label3 = New System.Windows.Forms.Label()
-        Me.MenuStrip1.SuspendLayout()
-        Me.SuspendLayout()
+        Me.MenuStrip1.SuspendLayout
+        Me.SuspendLayout
         '
         'log
         '
-        Me.log.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.log.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.log.Location = New System.Drawing.Point(16, 62)
-        Me.log.Multiline = True
+        Me.log.Multiline = true
         Me.log.Name = "log"
-        Me.log.ReadOnly = True
+        Me.log.ReadOnly = true
         Me.log.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.log.Size = New System.Drawing.Size(865, 333)
         Me.log.TabIndex = 25
@@ -58,7 +58,7 @@ Partial Class Main
         Me.Button1.Size = New System.Drawing.Size(217, 30)
         Me.Button1.TabIndex = 31
         Me.Button1.Text = "Create Gauntlets with Decks"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.Button1.UseVisualStyleBackColor = true
         '
         'Button3
         '
@@ -67,11 +67,11 @@ Partial Class Main
         Me.Button3.Size = New System.Drawing.Size(184, 30)
         Me.Button3.TabIndex = 32
         Me.Button3.Text = "Extract Decks"
-        Me.Button3.UseVisualStyleBackColor = True
+        Me.Button3.UseVisualStyleBackColor = true
         '
         'cmbformat
         '
-        Me.cmbformat.FormattingEnabled = True
+        Me.cmbformat.FormattingEnabled = true
         Me.cmbformat.Location = New System.Drawing.Point(79, 32)
         Me.cmbformat.Name = "cmbformat"
         Me.cmbformat.Size = New System.Drawing.Size(121, 24)
@@ -84,7 +84,7 @@ Partial Class Main
         Me.btnzipdecks.Size = New System.Drawing.Size(184, 30)
         Me.btnzipdecks.TabIndex = 34
         Me.btnzipdecks.Text = "Zip Decks by Format"
-        Me.btnzipdecks.UseVisualStyleBackColor = True
+        Me.btnzipdecks.UseVisualStyleBackColor = true
         '
         'MenuStrip1
         '
@@ -111,13 +111,13 @@ Partial Class Main
         '
         'Label1
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.0!)
+        Me.Label1.AutoSize = true
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 7!)
         Me.Label1.Location = New System.Drawing.Point(13, 398)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(314, 45)
         Me.Label1.TabIndex = 36
-        Me.Label1.Text = "1. Put Tournaments folder (json files) in the same folder. " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "2. Extract Decks." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "3" &
+        Me.Label1.Text = "1. Put Tournaments folder (json files) in the same folder. "&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"2. Extract Decks."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"3"& _ 
     ". Then, you can do ""Zips Decks by Format"""
         '
         'Button2
@@ -127,11 +127,11 @@ Partial Class Main
         Me.Button2.Size = New System.Drawing.Size(197, 30)
         Me.Button2.TabIndex = 37
         Me.Button2.Text = "Generate list.txt"
-        Me.Button2.UseVisualStyleBackColor = True
+        Me.Button2.UseVisualStyleBackColor = true
         '
         'Label2
         '
-        Me.Label2.AutoSize = True
+        Me.Label2.AutoSize = true
         Me.Label2.Location = New System.Drawing.Point(22, 36)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(52, 17)
@@ -140,7 +140,7 @@ Partial Class Main
         '
         'cmbyear
         '
-        Me.cmbyear.FormattingEnabled = True
+        Me.cmbyear.FormattingEnabled = true
         Me.cmbyear.Items.AddRange(New Object() {"standard", "modern", "vintage", "legacy", "pauper", "pioneer"})
         Me.cmbyear.Location = New System.Drawing.Point(247, 32)
         Me.cmbyear.Name = "cmbyear"
@@ -149,17 +149,17 @@ Partial Class Main
         '
         'chkoverwrite
         '
-        Me.chkoverwrite.AutoSize = True
+        Me.chkoverwrite.AutoSize = true
         Me.chkoverwrite.Location = New System.Drawing.Point(391, 36)
         Me.chkoverwrite.Name = "chkoverwrite"
         Me.chkoverwrite.Size = New System.Drawing.Size(169, 21)
         Me.chkoverwrite.TabIndex = 41
         Me.chkoverwrite.Text = "Overwrite files if exists"
-        Me.chkoverwrite.UseVisualStyleBackColor = True
+        Me.chkoverwrite.UseVisualStyleBackColor = true
         '
         'Label3
         '
-        Me.Label3.AutoSize = True
+        Me.Label3.AutoSize = true
         Me.Label3.Location = New System.Drawing.Point(206, 35)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(38, 17)
@@ -168,7 +168,7 @@ Partial Class Main
         '
         'Main
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8!, 16!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(906, 533)
         Me.Controls.Add(Me.chkoverwrite)
@@ -186,12 +186,12 @@ Partial Class Main
         Me.Name = "Main"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "MTGODecklistCachetoForge"
-        Me.MenuStrip1.ResumeLayout(False)
-        Me.MenuStrip1.PerformLayout()
-        Me.ResumeLayout(False)
-        Me.PerformLayout()
+        Me.MenuStrip1.ResumeLayout(false)
+        Me.MenuStrip1.PerformLayout
+        Me.ResumeLayout(false)
+        Me.PerformLayout
 
-    End Sub
+End Sub
     Friend WithEvents log As TextBox
     Friend WithEvents FolderBrowserDialog1 As FolderBrowserDialog
     Friend WithEvents Button1 As Button
