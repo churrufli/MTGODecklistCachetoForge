@@ -37,6 +37,7 @@ Partial Class Main
         Me.cmbyear = New System.Windows.Forms.ComboBox()
         Me.chkoverwrite = New System.Windows.Forms.CheckBox()
         Me.Label3 = New System.Windows.Forms.Label()
+        Me.cmbcategories = New System.Windows.Forms.ComboBox()
         Me.MenuStrip1.SuspendLayout
         Me.SuspendLayout
         '
@@ -72,7 +73,7 @@ Partial Class Main
         'cmbformat
         '
         Me.cmbformat.FormattingEnabled = true
-        Me.cmbformat.Location = New System.Drawing.Point(79, 32)
+        Me.cmbformat.Location = New System.Drawing.Point(272, 32)
         Me.cmbformat.Name = "cmbformat"
         Me.cmbformat.Size = New System.Drawing.Size(121, 24)
         Me.cmbformat.TabIndex = 33
@@ -132,7 +133,7 @@ Partial Class Main
         'Label2
         '
         Me.Label2.AutoSize = true
-        Me.Label2.Location = New System.Drawing.Point(22, 36)
+        Me.Label2.Location = New System.Drawing.Point(215, 36)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(52, 17)
         Me.Label2.TabIndex = 38
@@ -142,7 +143,7 @@ Partial Class Main
         '
         Me.cmbyear.FormattingEnabled = true
         Me.cmbyear.Items.AddRange(New Object() {"standard", "modern", "vintage", "legacy", "pauper", "pioneer"})
-        Me.cmbyear.Location = New System.Drawing.Point(247, 32)
+        Me.cmbyear.Location = New System.Drawing.Point(440, 32)
         Me.cmbyear.Name = "cmbyear"
         Me.cmbyear.Size = New System.Drawing.Size(121, 24)
         Me.cmbyear.TabIndex = 39
@@ -150,7 +151,7 @@ Partial Class Main
         'chkoverwrite
         '
         Me.chkoverwrite.AutoSize = true
-        Me.chkoverwrite.Location = New System.Drawing.Point(391, 36)
+        Me.chkoverwrite.Location = New System.Drawing.Point(584, 36)
         Me.chkoverwrite.Name = "chkoverwrite"
         Me.chkoverwrite.Size = New System.Drawing.Size(169, 21)
         Me.chkoverwrite.TabIndex = 41
@@ -160,17 +161,26 @@ Partial Class Main
         'Label3
         '
         Me.Label3.AutoSize = true
-        Me.Label3.Location = New System.Drawing.Point(206, 35)
+        Me.Label3.Location = New System.Drawing.Point(399, 35)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(38, 17)
         Me.Label3.TabIndex = 40
         Me.Label3.Text = "Year"
+        '
+        'cmbcategories
+        '
+        Me.cmbcategories.FormattingEnabled = true
+        Me.cmbcategories.Location = New System.Drawing.Point(16, 32)
+        Me.cmbcategories.Name = "cmbcategories"
+        Me.cmbcategories.Size = New System.Drawing.Size(193, 24)
+        Me.cmbcategories.TabIndex = 42
         '
         'Main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8!, 16!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(906, 533)
+        Me.Controls.Add(Me.cmbcategories)
         Me.Controls.Add(Me.chkoverwrite)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.cmbyear)
@@ -207,4 +217,5 @@ End Sub
     Friend WithEvents cmbyear As ComboBox
     Friend WithEvents chkoverwrite As CheckBox
     Friend WithEvents Label3 As Label
+    Friend WithEvents cmbcategories As ComboBox
 End Class
