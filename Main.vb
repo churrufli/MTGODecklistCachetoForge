@@ -8,7 +8,6 @@ Imports ICSharpCode.SharpZipLib.Zip
 Imports Newtonsoft.Json
 Imports Newtonsoft.Json.Linq
 
-
 Public Class Main
     Dim AllCards As String
     ReadOnly cards = Split(AllCards, vbCrLf)
@@ -52,12 +51,18 @@ Public Class Main
                     Dim dd = fn & "\" & DirName3
                     MyZipName = MyZipName
 
+                    Dim exists As Boolean = False
                     For i = 2014 To Date.Now.Year
                         If MyZipName.Contains(i) Then
                             MyZipName = i & Split(MyZipName, i)(1) & "-" & Split(MyZipName, i)(0)
+                            exists = True
                             Exit For
                         End If
                     Next i
+
+                    If (exists) = False Then
+                        MsgBox(MyZipName & " was not created")
+                    End If
 
                     MyZipName = MyZipName & ".zip"
                     MyZipName = Replace(MyZipName, "-.zip", ".zip")
@@ -80,7 +85,112 @@ Public Class Main
         WriteUserLog("Done!")
     End Function
 
+    Function RenameFolder(formato)
+        Dim DestinyFolder = Directory.GetCurrentDirectory & "\Tournaments\" & cmbcategories.SelectedItem.ToString
+        Dim OriginFolder = Directory.GetCurrentDirectory & "\Forge Tournaments Decks"
+        If Not Directory.Exists(OriginFolder) Then
+            MsgBox("Can't find json Tournaments Folder!")
+            Exit Function
+        End If
 
+        If Not Directory.Exists(DestinyFolder) Then
+            Directory.CreateDirectory(DestinyFolder)
+        End If
+
+        For Each d In Directory.GetDirectories(OriginFolder)
+
+            Dim DirName = New DirectoryInfo(d).Name
+            Dim fn = DestinyFolder & "\" & DirName
+
+            Dim GetMonths() = Directory.GetDirectories(OriginFolder & "\" & DirName)
+            If DirName <> "Block" And DirName <> "Draft" Then
+                'If DirName.Contains(cmbyear.SelectedValue.ToString) Then
+                ''aqui iba todo el for de abajo
+                'continuar = True
+                '******
+                For Each mymonth In GetMonths
+                    Dim DirName2 = New DirectoryInfo(mymonth).Name
+                    Dim fm = fn & "\" & DirName2
+
+                    Dim GetDays() = Directory.GetDirectories(mymonth)
+
+                    If DirName2.Contains(cmbyear.SelectedValue.ToString) Then
+
+                        For Each MyDays In GetDays
+                            Dim DirName3 = New DirectoryInfo(MyDays).Name
+                            'MsgBox(MyDays)
+                            Dim GetTournaments() = Directory.GetDirectories(MyDays)
+                            For Each ournament In GetTournaments
+                                'MsgBox(ournament)
+
+                                'prueba de renombrar 
+
+                                Dim partido = Split(ournament, "-" & cmbyear.SelectedValue.ToString & "-")(1)
+                                partido = partido
+                                If Len(partido) > 8 And partido.Contains("-") Then
+                                    Dim partes = Split(partido, "-")(1)
+                                    Dim newname
+                                    If partes.Contains("-") = False Then
+                                        newname = Replace(partido, "-" & partes.Substring(0, 2), "-" & partes.Substring(0, 2) & "-")
+                                        partes = partes.Substring(0, 2)
+                                        Dim total = ournament
+                                        newname = newname
+                                        Dim nuevodir = Replace(ournament, partido, newname)
+                                        Dim oldDirectoryPathandName = ournament
+
+                                        nuevodir = Replace(nuevodir, "---", "-")
+                                        nuevodir = Replace(nuevodir, "--", "-")
+                                        nuevodir = Replace(nuevodir, "---------", "-")
+                                        nuevodir = Replace(nuevodir, "--------", "-")
+                                        nuevodir = Replace(nuevodir, "---", "-")
+                                        nuevodir = Replace(nuevodir, "--", "-")
+                                        nuevodir = Replace(nuevodir, "--", "-")
+                                        nuevodir = Replace(nuevodir, "--", "-")
+                                        nuevodir = Replace(nuevodir, "--", "-")
+                                        nuevodir = Replace(nuevodir, "-------", "-")
+                                        nuevodir = Replace(nuevodir, "---", "-")
+                                        nuevodir = Replace(nuevodir, "--", "-")
+                                        Dim newDirectoryName = nuevodir
+                                        'try
+                                        'FileIO.FileSystem.RenameDirectory(oldDirectoryPathandName, newDirectoryName)
+                                        If oldDirectoryPathandName <> newDirectoryName Then
+                                            If System.IO.Directory.Exists(newDirectoryName) Then
+                                                System.IO.Directory.Delete(newDirectoryName, True)
+                                            End If  
+                                            try
+                                            FileSystem.Rename(oldDirectoryPathandName, newDirectoryName)
+                                                Catch
+                                                End Try
+
+                                        End If
+
+
+                                        '            catch
+                                        'End try
+                                    End If
+
+
+                                End If
+
+                            Next
+
+
+
+                        Next
+                    End If
+                    log.Text = ""
+                Next
+                log.Text = ""
+
+                'End If
+            End If
+
+        Next
+        WriteUserLog("Done rewrite!")
+        '*************************************
+        'Next
+
+    End Function
     Function ConvertJsonFilestoDck(formato)
 
         'If cmbformat.SelectedValue.ToString = "all" Then
@@ -106,8 +216,14 @@ Public Class Main
         '***************************************
         'For myformat = 0 To listformats.Count - 1
 
+        Dim OriginFolder
+        try
+         OriginFolder = Directory.GetCurrentDirectory & "\Tournaments\" & cmbcategories.SelectedItem.ToString
+            Catch
+            MsgBox ("select category") 
+            Exit Function
+            End Try
 
-        Dim OriginFolder = Directory.GetCurrentDirectory & "\Tournaments\" & cmbcategories.SelectedItem.ToString
         Dim DestinyFolder = Directory.GetCurrentDirectory & "\Forge Tournaments Decks"
         If Not Directory.Exists(OriginFolder) Then
             MsgBox("Can't find json Tournaments Folder!")
@@ -392,9 +508,12 @@ Public Class Main
                     Dim cartaprohibida As String = LCase(a(contador2))
                     MyNamecarta = LCase(MyNamecarta)
                     If LCase(MyNamecarta) = LCase(cartaprohibida) Then
-                        Return _
-                            ("Forge unsupported card '" & cartaprohibida & "' in " & titdeck & ". Deck not saved." &
-                             vbCrLf)
+                        Dim myusc As String = "Forge unsupported card '" & cartaprohibida & "' in " & titdeck & ". Deck not saved." &
+                             vbCrLf
+                        MsgBox(myusc)
+                        Return myusc
+
+
                         Exit Function
                     End If
                     contador2 = contador2 + 1
@@ -838,11 +957,11 @@ Public Class Main
             Dim GetDays() = Directory.GetDirectories(OriginFolder & "\" & DirName)
 
             For Each MyDays In GetDays
-                    Dim ADirName = New DirectoryInfo(MyDays).Name
-                    Dim posible = DestinyFolder & "LOCKED_" & ADirName & ".dat"
-                    If Not File.Exists(posible) Then
-                        creategauntlet(MyDays, DestinyFolder & "\")
-                    End If
+                Dim ADirName = New DirectoryInfo(MyDays).Name
+                Dim posible = DestinyFolder & "LOCKED_" & ADirName & ".dat"
+                If Not File.Exists(posible) Then
+                    creategauntlet(MyDays, DestinyFolder & "\")
+                End If
 
 
             Next
@@ -852,13 +971,38 @@ Public Class Main
 
     Function ConvertDeckstoGauntlets2(OriginFolder2)
         Dim DestinyFolder = Directory.GetCurrentDirectory & "\Forge Gauntlets"
-                              creategauntlet(OriginFolder2, DestinyFolder & "\")
+        creategauntlet(OriginFolder2, DestinyFolder & "\")
 
     End Function
-    Private Sub Button1_Click(sender As Object, e As EventArgs)
-
+    Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
+    renombarcarpetas
     End Sub
 
+    Sub renombarcarpetas
+            If cmbyear.SelectedValue.ToString = "all" Then
+            MsgBox("Select Year")
+            Exit Sub
+        End If
+
+
+        If _
+            MsgBox(
+                "Renaming folders! Warning! you need an update file unsupportedcards.txt with all cards unsupported by Forge to avoid unscripted cards in Forge. An outdate file may causes bad deck files.",
+                MsgBoxStyle.YesNo, "Warning!") = MsgBoxResult.Yes Then
+            If cmbformat.SelectedValue.ToString = "all" Then
+                For a = 0 To cmbformat.Items.Count - 1
+                    If cmbformat.Items(a).value.ToString <> "all" Then
+                        RenameFolder(cmbformat.Items(a).value.ToString)
+                    End If
+                Next
+            Else
+                'ConvertJsonFilestoDck(cmbformat.SelectedItem.value.ToString)
+                RenameFolder(cmbformat.SelectedItem.value.ToString)
+            End If
+
+
+        End If
+    End Sub
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
         If cmbyear.SelectedValue.ToString = "all" Then
             MsgBox("Select Year")
@@ -877,10 +1021,11 @@ Public Class Main
                     End If
                 Next
             Else
-                ConvertJsonFilestoDck(cmbformat.SelectedItem.text)
+                ConvertJsonFilestoDck(cmbformat.SelectedItem.value.ToString)
 
             End If
 
+            renombarcarpetas
 
         End If
     End Sub
@@ -891,15 +1036,23 @@ Public Class Main
             Exit Sub
         End If
 
+        Dim formato As String
+        Dim myyear As String
+
+
+
+
+
         If cmbformat.SelectedValue.ToString = "all" Then
+
+
             For a = 0 To cmbformat.Items.Count - 1
                 If cmbformat.Items(a).value.ToString <> "all" Then
                     zipdecks(cmbformat.Items(a).value.ToString)
                 End If
             Next
         Else
-            zipdecks(cmbformat.SelectedItem.text)
-
+            zipdecks(cmbformat.SelectedItem.value.ToString)
         End If
     End Sub
 
@@ -1003,7 +1156,7 @@ Public Class Main
                 End If
             Next
         Else
-            GenerateList(cmbformat.SelectedItem.text)
+            GenerateList(cmbformat.SelectedItem.value.ToString)
 
         End If
     End Sub
@@ -1163,5 +1316,16 @@ Public Class Main
     Private Sub Button4_Click_1(sender As Object, e As EventArgs) Handles Button4.Click
         Dim MyFolder = txfolder.Text
         ConvertDeckstoGauntlets2(MyFolder)
+    End Sub
+
+    Private Sub TabPage1_Click(sender As Object, e As EventArgs) Handles TabPage1.Click
+
+    End Sub
+
+    Private Sub Button7_Click(sender As Object, e As EventArgs) 
+        For i = 1 To 10
+        MsgBox("hola!"& i)
+            Next
+
     End Sub
 End Class
