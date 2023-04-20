@@ -12,13 +12,13 @@ Public Class Main
     Dim AllCards As String
     ReadOnly cards = Split(AllCards, vbCrLf)
 
-    Function zipdecks(formato)
+    Sub zipdecks(formato)
 
         Dim OriginFolder = Directory.GetCurrentDirectory & "\Forge Tournaments Decks"
         Dim DestinyFolder = Directory.GetCurrentDirectory & "\Forge Tournaments Decks Zipped"
         If Not Directory.Exists(OriginFolder) Then
             MsgBox("Can't find json Tournaments Folder!")
-            Exit Function
+            Exit Sub
         End If
 
         If Not Directory.Exists(DestinyFolder) Then
@@ -83,7 +83,7 @@ Public Class Main
             Next
         Next
         WriteUserLog("Done!")
-    End Function
+    End Sub
 
     Function RenameFolder(formato)
         Dim DestinyFolder = Directory.GetCurrentDirectory & "\Tournaments\" & cmbcategories.SelectedItem.ToString
@@ -193,28 +193,6 @@ Public Class Main
     End Function
     Function ConvertJsonFilestoDck(formato)
 
-        'If cmbformat.SelectedValue.ToString = "all" Then
-        '    MsgBox("Select Format")
-        '    Exit Function
-        'End If
-
-
-
-        'Dim listformats As New List(Of String)
-
-        'If cmbformat.SelectedValue.ToString = "all" Then
-        '    For i = 0 To cmbformat.Items.Count - 1
-        '        If cmbformat.Items(i).value.ToString <> "all" Then
-        '            listformats.Add(cmbformat.Items(i).value.ToString)
-        '        End If
-        '    Next i
-        'Else
-        '    listformats.Add(cmbformat.SelectedItem.ToString)
-        'End If
-
-
-        '***************************************
-        'For myformat = 0 To listformats.Count - 1
 
         Dim OriginFolder
         try
@@ -1176,7 +1154,43 @@ Public Class Main
 
         Dim filenames As String() = Directory.GetFiles(OriginFolder & "\" & formato,
                                                        "*.zip")
+
+        Dim MyNameOfFile = "net-decks-archive-" & formato & ".txt"
         Dim tx = ""
+
+        Dim listaactual As New List(Of String)
+        Dim listaleida As New List(Of String)
+
+        'tengo que crear dos listas, las que hay y las que existen en el fichero
+        If IO.File.Exists(MyNameOfFile) Then
+            'Dim fileReader As String
+            'fileReader = My.Computer.FileSystem.ReadAllText(MyNameOfFile)
+            'For Each line In fileReader
+            '    listaactual.Add(line)
+            '    tx = tx & line
+            'Next
+
+            Dim reader As StreamReader = My.Computer.FileSystem.OpenTextFileReader(MyNameOfFile)
+            Dim a As String
+
+            Do
+                a = reader.ReadLine
+                listaactual.Add(a & vbCrLf)
+
+                tx = tx & a & vbCrLf
+
+                ' Code here
+                '
+            Loop Until a Is Nothing
+
+            reader.Close()
+
+        End If
+
+
+
+
+
         For Each d In filenames
 
             Dim totaldecks = GetTotalDecks(d.ToString)
@@ -1204,6 +1218,9 @@ Public Class Main
             MyName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(MyName)
             MyName = MyName & " (" & totaldecks & " decks)"
 
+
+
+
             If totaldecks <> 0 Then
                 Dim comp = Split(MyName, "-")
                 Dim MyDate = ""
@@ -1218,15 +1235,33 @@ Public Class Main
                 'PROBLEMA EN EL FORGE, COMENTO MyName = Replace(MyName, "-", "/")
                 Dim ServerUrl As String = d
                 ServerUrl = Replace(ServerUrl, OriginFolder & "\" & formato & "\", "")
-                tx = tx & MyName & " | https://downloads.cardforge.org/decks/archive/" &
-                     formato & "/" & ServerUrl & vbCrLf
+                Dim a = MyName & " | https://downloads.cardforge.org/decks/archive/" & formato & "/" & ServerUrl & vbCrLf
+
+                If listaactual.Contains(a) = False Then
+                    tx = tx & a
+                    listaleida.Add(a)
+                Else
+                    Dim hola = ""
+
+                End If
+
             Else
                 Dim hola = ""
+
             End If
 
         Next
 
-        Dim MyNameOfFile = "net-decks-archive-" & formato & ".txt"
+
+
+
+
+
+        If IO.File.Exists(MyNameOfFile) Then
+            Dim fileReader As String
+            fileReader = My.Computer.FileSystem.ReadAllText(MyNameOfFile)
+        End If
+
         Try
             File.Delete(MyNameOfFile)
         Catch
