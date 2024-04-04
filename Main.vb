@@ -8,6 +8,10 @@ Imports ICSharpCode.SharpZipLib.Zip
 Imports Newtonsoft.Json
 Imports Newtonsoft.Json.Linq
 
+Imports ICSharpCode.SharpZipLib.BZip2
+Imports ICSharpCode.SharpZipLib.Tar
+
+
 Public Class Main
     Dim AllCards As String
     ReadOnly cards = Split(AllCards, vbCrLf)
@@ -30,7 +34,6 @@ Public Class Main
             Dim DirName = New DirectoryInfo(d).Name
             Dim fn = DestinyFolder & "\" & DirName
 
-
             Dim GetMonths() =
                     Directory.GetDirectories(OriginFolder & "\" & formato & "\" & DirName)
 
@@ -45,45 +48,80 @@ Public Class Main
 
                 For Each MyDays In GetDays
 
-                    Dim DirName3 = New DirectoryInfo(MyDays).Name
-                    Dim MyZipName = DirName3.ToString
-                    DirName3 = DirName2 & "\" & DirName3
-                    Dim dd = fn & "\" & DirName3
-                    MyZipName = MyZipName
+                    Dim MyZipName
+                    Dim GetFolders() = Directory.GetDirectories(MyDays)
+                    For Each myFolder In GetFolders
+                        MyZipName = New DirectoryInfo(myFolder).Name
+                        MyZipName = MyZipName & ".zip"
 
-                    Dim exists As Boolean = False
-                    For i = 2014 To Date.Now.Year
-                        If MyZipName.Contains(i) Then
-                            MyZipName = i & Split(MyZipName, i)(1) & "-" & Split(MyZipName, i)(0)
-                            exists = True
-                            Exit For
-                        End If
-                    Next i
 
-                    If (exists) = False Then
-                        MsgBox(MyZipName & " was not created")
-                    End If
 
-                    MyZipName = MyZipName & ".zip"
-                    MyZipName = Replace(MyZipName, "-.zip", ".zip")
-                    MyZipName = Replace(MyZipName, "-(", "(")
+                        Dim DirName3 = New DirectoryInfo(MyDays).Name
 
-                    If _
-                        File.Exists(
-                            "Forge Tournaments Decks Zipped\" & formato & "\" & MyZipName) =
-                        False Then
-                        compressDirectory(MyDays,
-                                          "Forge Tournaments Decks Zipped\" & formato & "\" &
+                        DirName3 = DirName2 & "\" & DirName3
+                        Dim dd = fn & "\" & DirName3
+                        MyZipName = ReorganizarCadena(MyZipName)
+                        MyZipName = Replace(MyZipName, "-.zip", ".zip")
+                        If _
+                            File.Exists(
+                                "Forge Tournaments Decks Zipped\" & formato & "\" & MyZipName) =
+                            False Then
+                            compressDirectory(myFolder,
+                                          Directory.GetCurrentDirectory() & "\Forge Tournaments Decks Zipped\" & formato & "\" &
                                           MyZipName, 9)
-                        WriteUserLog("Zipping " & MyZipName & vbCrLf)
-                    Else
-                        WriteUserLog("Skipping " & MyZipName & vbCrLf)
-                    End If
+                            WriteUserLog("Zipping " & MyZipName & vbCrLf)
+                        Else
+                            WriteUserLog("Skipping " & MyZipName & vbCrLf)
+                        End If
+                    Next
                 Next
             Next
         Next
         WriteUserLog("Done!")
     End Sub
+
+    Function ReorganizarCadena(ByVal inputTexto As String) As String
+        ' Verificar si el texto contiene "2023" o "2024"
+        Dim año As String = ""
+        If inputTexto.Contains("2023") Then
+            año = "2023"
+        ElseIf inputTexto.Contains("2024") Then
+            año = "2024"
+        Else
+            ' Si no se encuentra ningún año en el texto, devolver el texto original
+            Return inputTexto
+        End If
+
+        ' Eliminar la extensión ".zip"
+        inputTexto = inputTexto.Replace(".zip", "")
+
+        ' Dividir la cadena en dos partes basadas en el año identificado
+        Dim partes As String() = inputTexto.Split(New String() {año}, StringSplitOptions.None)
+
+        ' Verificar si la cadena se pudo dividir en dos partes
+        If partes.Length >= 2 Then
+            Dim x As String = partes(0)
+            Dim y As String = partes(1)
+
+            ' Reorganizar las partes en un nuevo formato
+            Dim r As String = año & y & "-" & x
+
+            ' Eliminar posibles duplicaciones de guiones
+            r = r.Replace("--", "-")
+
+            ' Volver a agregar la extensión ".zip"
+            r &= ".zip"
+
+            ' Eliminar un guion adicional seguido de ".zip"
+            r = r.Replace("-.zip", ".zip")
+
+            ' Devolver el resultado final
+            Return r
+        Else
+            ' Si no se pudo dividir en dos partes, devolver la cadena original
+            Return inputTexto & ".zip"
+        End If
+    End Function
 
     Function RenameFolder(formato)
         Dim DestinyFolder = Directory.GetCurrentDirectory & "\Tournaments\" & cmbcategories.SelectedItem.ToString
@@ -123,9 +161,12 @@ Public Class Main
                             For Each ournament In GetTournaments
                                 'MsgBox(ournament)
 
-                                'prueba de renombrar 
+                                'prueba de renombrar
+                                Dim partido = ournament
+                                If partido.Contains("-") Then
+                                    partido = Split(ournament, "-" & cmbyear.SelectedValue.ToString & "-")(1)
+                                End If
 
-                                Dim partido = Split(ournament, "-" & cmbyear.SelectedValue.ToString & "-")(1)
                                 partido = partido
                                 If Len(partido) > 8 And partido.Contains("-") Then
                                     Dim partes = Split(partido, "-")(1)
@@ -156,25 +197,21 @@ Public Class Main
                                         If oldDirectoryPathandName <> newDirectoryName Then
                                             If System.IO.Directory.Exists(newDirectoryName) Then
                                                 System.IO.Directory.Delete(newDirectoryName, True)
-                                            End If  
-                                            try
-                                            FileSystem.Rename(oldDirectoryPathandName, newDirectoryName)
-                                                Catch
-                                                End Try
+                                            End If
+                                            Try
+                                                FileSystem.Rename(oldDirectoryPathandName, newDirectoryName)
+                                            Catch
+                                            End Try
 
                                         End If
-
 
                                         '            catch
                                         'End try
                                     End If
 
-
                                 End If
 
                             Next
-
-
 
                         Next
                     End If
@@ -191,18 +228,17 @@ Public Class Main
         'Next
 
     End Function
+
     Function ConvertJsonFilestoDck(formato)
-
-
-        Dim OriginFolder
-        try
-         OriginFolder = Directory.GetCurrentDirectory & "\Tournaments\" & cmbcategories.SelectedItem.ToString
-            Catch
-            MsgBox ("select category") 
+        Dim OriginFolder As String
+        Try
+            OriginFolder = Path.Combine(Directory.GetCurrentDirectory(), "Tournaments", cmbcategories.SelectedItem.ToString())
+        Catch
+            MsgBox("Select category")
             Exit Function
-            End Try
+        End Try
 
-        Dim DestinyFolder = Directory.GetCurrentDirectory & "\Forge Tournaments Decks"
+        Dim DestinyFolder As String = Path.Combine(Directory.GetCurrentDirectory(), "Forge Tournaments Decks")
         If Not Directory.Exists(OriginFolder) Then
             MsgBox("Can't find json Tournaments Folder!")
             Exit Function
@@ -212,223 +248,125 @@ Public Class Main
             Directory.CreateDirectory(DestinyFolder)
         End If
 
-        For Each d In Directory.GetDirectories(OriginFolder)
+        For Each yearFolder In Directory.GetDirectories(OriginFolder)
+            Dim year = New DirectoryInfo(yearFolder).Name
 
-            Dim DirName = New DirectoryInfo(d).Name
-            Dim fn = DestinyFolder & "\" & DirName
+            If year.Contains(cmbyear.SelectedValue.ToString) Then
+                For Each monthFolder In Directory.GetDirectories(yearFolder)
+                    Dim month = New DirectoryInfo(monthFolder).Name
+                    ''FUERZO AL MES
+                    'If month.Contains(cmbmonth.SelectedItem.ToString) Then
+                    For Each dayFolder In Directory.GetDirectories(monthFolder)
+                        Dim day = New DirectoryInfo(dayFolder).Name
+                        Dim tournamentDate = New DateTime(Convert.ToInt32(year), Convert.ToInt32(month), Convert.ToInt32(day))
 
-            Dim GetMonths() = Directory.GetDirectories(OriginFolder & "\" & DirName)
+                        For Each jsonFilePath In Directory.GetFiles(dayFolder, "*" & formato & "*.json")
+                            Dim jsonContent = File.ReadAllText(jsonFilePath)
+                            Dim jsonResult As Dictionary(Of String, Object) = JsonConvert.DeserializeObject(Of Dictionary(Of String, Object))(jsonContent)
+                            Dim tournamentName As String = Path.GetFileNameWithoutExtension(jsonFilePath)
+                            tournamentName = RemoveInvalidFileNameChars(tournamentName)
 
+                            Dim tournamentFolderPath = Path.Combine(DestinyFolder, $"{formato}\{year}\{month}\{day}\{tournamentName}")
+                            tournamentFolderPath = ModificarNombreCarpeta(tournamentFolderPath)
+                            If Not Directory.Exists(tournamentFolderPath) Then
+                                Directory.CreateDirectory(tournamentFolderPath)
+                            ElseIf Not chkoverwrite.Checked Then
+                                Continue For
+                            End If
 
-            'Dim listyears As New List(Of String)
+                            Dim deckCount As Integer = 1
 
-            'If cmbyear.SelectedValue.ToString = "all" Then
-            '    For i = 0 To cmbformat.Items.Count - 1
-            '        If cmbyear.Items(i).value.ToString <> "all" Then
-            '            listyears.Add(cmbyear.Items(i).value.ToString)
-            '        End If
-            '    Next i
-            'Else
-            '    listyears.Add(cmbyear.SelectedItem.ToString)
-            'End If
+                            For Each deckInfo As JObject In jsonResult("Decks")
+                                Dim player = deckInfo("Player").ToString()
+                                Dim result = deckInfo("Result").ToString()
+                                Dim deckName = $"{deckCount:00} {player} {result}"
+                                deckName = RemoveInvalidFileNameChars(deckName)
 
+                                Dim deckFilePath = Path.Combine(tournamentFolderPath, $"{deckName}.dck")
 
-            'For myyear = 0 To listyears.Count - 1
+                                If Not File.Exists(deckFilePath) OrElse chkoverwrite.Checked Then
+                                    Dim mainboard = GetCardList(deckInfo("Mainboard"))
+                                    Dim sideboard = GetCardList(deckInfo("Sideboard"))
 
+                                    Dim deckContent As String = $"[metadata]{Environment.NewLine}Name={deckName}{Environment.NewLine}[Main]{Environment.NewLine}{mainboard}{Environment.NewLine}[sideboard]{Environment.NewLine}{sideboard}"
 
+                                    If validatecards(deckContent, deckName) = "" Then
 
-            'If DirName.Contains(cmbyear.SelectedValue.ToString) And continuar = False Then
-            'Dim valor = listyears(myyear).ToString
-            'If DirName.Contains(valor) Then
-            If DirName.Contains(cmbyear.SelectedValue.ToString) Then
-                ''aqui iba todo el for de abajo
-                'continuar = True
-                '******
-                For Each mymonth In GetMonths
-                    Dim DirName2 = New DirectoryInfo(mymonth).Name
-                    Dim fm = fn & "\" & DirName2
+                                        File.WriteAllText(deckFilePath, deckContent)
+                                        WriteUserLog($"Saved: {deckFilePath}{Environment.NewLine}")
 
-                    Dim GetDays() = Directory.GetDirectories(mymonth)
+                                    Else
 
-                    For Each MyDays In GetDays
-
-                        Dim DirName3 = New DirectoryInfo(MyDays).Name
-                        DirName3 = DirName2 & "\" & DirName3
-                        Dim dd = fn & "\" & DirName3
-
-
-                        For Each f In Directory.GetFiles(MyDays)
-                            If LCase(f).Contains(LCase(formato)) Then
-
-                                'If LCase(f).Contains(LCase(listformats.Item(myformat).ToString)) Then
-
-                                Dim tokenJson = JsonConvert.SerializeObject(File.ReadAllText(f))
-                                Dim jsonResult =
-                                                    JsonConvert.DeserializeObject(Of Dictionary(Of String, Object))(
-                                                        File.ReadAllText(f))
-
-                                Dim TournamentName As String = Path.GetFileNameWithoutExtension(f)
-                                Dim TournamentDate = CDate(jsonResult.Item("Tournament").Item("Date").ToString)
-                                TournamentName = RemoveInvalidFileNameChars(TournamentName)
-                                Dim tournamentfolder = dd & "\" & TournamentName
-
-                                Dim siguiente = False
-                                Dim mypath = Replace(d, OriginFolder, "")
-
-                                Dim miformato As String = getformat(f)
-                                Dim elaño As String = Replace(d, OriginFolder, "")
-
-                                Dim elmes As String = Replace(mymonth, OriginFolder & elaño, "")
-
-                                mypath = DestinyFolder & "\" & miformato & elaño & elmes & "\" & TournamentName
-
-                                If Not Directory.Exists(mypath) Then
-                                    Directory.CreateDirectory(mypath)
-                                    siguiente = True
+                                        Exit Function
+                                    End If
 
                                 Else
-                                    If chkoverwrite.Checked = True Then
-                                        siguiente = True
-                                    Else
-                                        siguiente = False
-                                    End If
+                                        WriteUserLog($"Exists: {deckFilePath}{Environment.NewLine}")
                                 End If
 
-                                'Dim aver As String = TournamentName.Substring(TournamentName.Length - 2)
-                                'If aver = "-0" Then
-                                '    siguiente = False
-                                '    Try
-                                '        Directory.Delete(mypath, True)
-                                '    Catch
-                                '    End Try
-                                'End If
+                                deckCount += 1
+                            Next
 
-                                If siguiente = True Then
-
-                                    Dim json As String = File.ReadAllText(f)
-                                    Dim ser As JObject = JObject.Parse(json)
-                                    Dim data As List(Of JToken) = ser.Children().ToList
-                                    Dim titdeck
-                                    Dim contador As Long = 1
-                                    Dim totaldecks = jsonResult.Item("Decks").count
-                                    Dim newpath = mypath
-
-                                    mypath = newpath
-                                    For i = 0 To jsonResult.Item("Decks").count - 1
-
-                                        titdeck = "#" & IIf(contador <= 9, "0", "") & contador & " " &
-                                                              jsonResult.Item("Decks").item(i).item("Player") & " " &
-                                                              jsonResult.Item("Decks").item(i).item("Result")
-                                        Dim FinalName = Trim(titdeck)
-                                        FinalName = RemoveInvalidFileNameChars(FinalName)
-                                        Dim path As String = mypath & "\" & FinalName & ".dck"
-
-                                        Dim overwrite = False
-                                        If chkoverwrite.Checked = True Then
-                                            overwrite = True
-                                        End If
-
-                                        overwrite = True
-                                        If overwrite Then
-                                            Dim mb = ""
-                                            Dim Mainboard = jsonResult.Item("Decks").item(i).item("Mainboard")
-
-                                            For x = 0 To Mainboard.count - 1
-                                                Dim carta = RemoveDigits(Mainboard.item(x).item("CardName"))
-                                                carta = Replace(carta, "&apos;", "'")
-                                                carta = Replace(carta, "ä", "a")
-                                                carta = Replace(carta, "ë", "e")
-                                                carta = Replace(carta, "ï", "i")
-                                                carta = Replace(carta, "ö", "o")
-                                                carta = Replace(carta, "ü", "u")
-                                                carta = Replace(carta, "û", "u")
-                                                carta = RemoveDiacritics(carta)
-
-                                                Dim card = Mainboard.item(x).item("Count") & " " &
-                                                                       Mainboard.item(x).item("CardName")
-                                                mb = mb & card & vbCrLf
-                                            Next x
-
-                                            Dim sb = ""
-                                            Dim Sideboard = jsonResult.Item("Decks").item(i).item("Sideboard")
-
-                                            For x = 0 To Sideboard.count - 1
-                                                Dim card = Sideboard.item(x).item("Count") & " " &
-                                                                       Sideboard.item(x).item("CardName")
-                                                sb = sb & card & vbCrLf
-                                            Next x
-
-                                            Dim deck As String = "[metadata]" & vbCrLf & "Name=" & titdeck & vbCrLf &
-                                                                             "[Main]" & vbCrLf & mb & "[sideboard]" & vbCrLf & sb
-
-                                            Dim rp = False
-                                            If InStr(tournamentfolder, "commander", CompareMethod.Text) > 0 Then
-                                                rp = True
-                                            End If
-                                            If InStr(tournamentfolder, "brawl", CompareMethod.Text) > 0 Then
-                                                rp = True
-                                            End If
-
-                                            If rp = True Then
-                                                deck = Replace(deck, "[sideboard]", "[commander]")
-                                            End If
-
-                                            Dim save = False
-
-                                            If validatecards(deck, titdeck) = "" Then
-
-                                                Dim x = 1
-
-                                                If Not File.Exists(path) Then
-                                                    Using fs As FileStream = File.Create(path)
-                                                        Dim info As Byte() = New UTF8Encoding(True).GetBytes(deck)
-                                                        fs.Write(info, 0, info.Length)
-                                                    End Using
-                                                Else
-                                                    If overwrite Then
-                                                        Using fs As FileStream = File.Create(path)
-                                                            Dim info As Byte() = New UTF8Encoding(True).GetBytes(deck)
-                                                            fs.Write(info, 0, info.Length)
-                                                        End Using
-                                                    Else
-                                                        WriteUserLog("exist " & path & vbCrLf)
-                                                    End If
-
-                                                End If
-
-                                                WriteUserLog("saved" & path & vbCrLf)
-                                            Else
-                                                log.Text = log.Text & validatecards(deck, titdeck) & vbCrLf
-
-                                                WriteUserLog(validatecards(deck, titdeck) & vbCrLf)
-                                            End If
-                                        Else
-                                            WriteUserLog("exist " & path & vbCrLf)
-
-                                        End If
-
-                                        contador = contador + 1
-
-                                    Next i
-                                End If
-                            End If
+                            deckCount = 1
                         Next
-                        log.Text = ""
                     Next
-                    log.Text = ""
+                    'End If
+
                 Next
-                '******
             End If
-
-
-            'Next
-
-
         Next
-        WriteUserLog("Done!")
-        '*************************************
-        'Next
 
+        WriteUserLog("Done!")
+    End Function
+
+
+
+    Function ModificarNombreCarpeta(ByVal rutaCarpeta As String) As String
+        ' Utilizamos una expresión regular para buscar el último guión seguido de más de dos dígitos
+        Dim regexPattern As String = "^(.*-)(\d{2,})$"
+        Dim regex As New Regex(regexPattern)
+
+        ' Comprobamos si la cadena coincide con el patrón
+        Dim match As Match = regex.Match(rutaCarpeta)
+
+        If match.Success Then
+            ' Obtenemos la parte del nombre antes del guión y la parte de los últimos dos dígitos
+            Dim parteNombre As String = match.Groups(1).Value
+            Dim ultimosDigitos As String = match.Groups(2).Value
+
+            ' Verificamos que haya más de dos dígitos después del último guión
+            If ultimosDigitos.Length > 2 Then
+                ' Renombramos la cadena con los dos últimos dígitos y un guión
+                Dim nuevoNombre As String = $"{parteNombre}{ultimosDigitos.Substring(0, 2)}-{ultimosDigitos.Substring(2)}"
+
+                ' Construimos la nueva ruta con el nombre modificado
+                Dim nuevaRutaCarpeta As String = rutaCarpeta.Replace(match.Value, nuevoNombre)
+
+                Return nuevaRutaCarpeta
+            End If
+        End If
+
+        ' Devolvemos la ruta original si no se cumple el patrón o la condición de dígitos
+        Return rutaCarpeta
+    End Function
+
+    Function EsNumerico(s As String) As Boolean
+        ' Función para verificar si una cadena es numérica
+        Dim result As Integer
+        Return Integer.TryParse(s, result)
+    End Function
+
+
+    Function GetCardList(cards As JToken) As String
+        Dim cardList As New StringBuilder()
+
+        For Each cardInfo As JObject In cards
+            Dim count = cardInfo("Count").ToString()
+            Dim cardName = cardInfo("CardName").ToString()
+            cardList.AppendLine($"{count} {cardName}")
+        Next
+
+        Return cardList.ToString()
     End Function
 
 
@@ -455,57 +393,41 @@ Public Class Main
         log.ScrollToCaret()
     End Sub
 
-    Public Shared Function validatecards(tx, titdeck) As String
-        'Return ""
+    Public Shared Function ValidateCards(deckText As String, deckTitle As String) As String
         Try
-            Dim readText As String = File.ReadAllText("unsupportedcards.txt")
-            Dim tx1 As String = readText
-            tx1 = Replace(tx1, vbLf, vbCrLf)
-            Dim a As Array = Split(tx1, vbCrLf)
+            ' Read unsupported cards from file
+            Dim unsupportedCards As New List(Of String)
+            Using reader As New StreamReader("unsupportedcards.txt")
+                Do While Not reader.EndOfStream
+                    unsupportedCards.Add(reader.ReadLine())
+                Loop
+            End Using
 
-            readText = tx
-            Dim t As String = Split(readText, "[Main]" & vbCrLf)(1).ToString
-            Dim t2 As String = Split(LCase(readText), "[sideboard]" & vbCrLf)(1).ToString
-            t = t & t2
-            Dim b As Array = Split(t, vbCrLf)
+            ' Extract cards from the deck
+            Dim deckLines As String() = deckText.Split({"[Main]", "[sideboard]"}, StringSplitOptions.RemoveEmptyEntries)
+            Dim deckCards As New List(Of String)(deckLines(1).Split({vbCrLf}, StringSplitOptions.RemoveEmptyEntries))
 
-            Dim contador = 0
+            ' Check for unsupported cards
+            For Each deckCard In deckCards
+                Dim cardName As String = deckCard.Split("|"c)(0).Trim()
 
+                ' Remove card numbers
+                For x = 1 To 20
+                    cardName = cardName.Replace(x & " ", "")
+                Next
 
-            While contador < b.Length
-
-                Dim MyNamecarta = b(contador) & ""
-
-                For x = 0 To 70
-                    MyNamecarta = Replace(MyNamecarta, x + 1 & " ", "")
-                Next x
-
-                Dim contador2 = 0
-
-                While contador2 < a.Length
-                    Dim cartaprohibida As String = LCase(a(contador2))
-                    MyNamecarta = LCase(MyNamecarta)
-                    If LCase(MyNamecarta) = LCase(cartaprohibida) Then
-                        Dim myusc As String = "Forge unsupported card '" & cartaprohibida & "' in " & titdeck & ". Deck not saved." &
-                             vbCrLf
-                        MsgBox(myusc)
-                        Return myusc
-
-
-                        Exit Function
-                    End If
-                    contador2 = contador2 + 1
-                End While
-
-                contador = contador + 1
-            End While
-
-            Return ""
-
+                If unsupportedCards.Any(Function(unsupportedCard) String.Equals(cardName, unsupportedCard, StringComparison.OrdinalIgnoreCase)) Then
+                    MsgBox("Forge unsupported card " & cardName & " in " & deckTitle & ". Deck not saved.{vbCrLf}")
+                    Return "Forge unsupported card " & cardName & " in " & deckTitle & ". Deck not saved.{vbCrLf}"
+                End If
+            Next
         Catch ex As Exception
-            Return ""
+            ' Handle the exception appropriately (e.g., log or rethrow)
         End Try
+
+        Return ""
     End Function
+
 
     Private Function RemoveInvalidFileNameChars(UserInput As String) As String
         For Each invalidChar In Path.GetInvalidFileNameChars
@@ -562,14 +484,12 @@ Public Class Main
         x = x & "</eventRecords>" & vbCrLf
         x = x & "<eventNames>" & vbCrLf
 
-
         For mazo = 0 To list.Count - 1
             x = x & " <string>" & list(mazo) & "</string>" & vbCrLf
         Next
 
         x = x & " </eventNames>" & vbCrLf
         x = x & " <decks>" & vbCrLf
-
 
         Dim titdeck = ""
 
@@ -628,7 +548,6 @@ Public Class Main
                 x = x & "<entry>" & vbCrLf
                 x = x & "<forge.deck.DeckSection>Sideboard</forge.deck.DeckSection>" & vbCrLf
                 x = x & "<forge.deck.CardPool>" & vbCrLf
-
 
                 For b = 0 To fifi.Length - 1
                     If fifi(b).ToString <> "" Then
@@ -783,7 +702,6 @@ Public Class Main
 
         Dim SearchWithinThis As String = AllCards
 
-
         For d = 0 To cards.Length - 1
 
             If Split(cards(d), "|")(0).ToString = carta Then
@@ -857,7 +775,6 @@ Public Class Main
         Return dir
     End Function
 
-
     Public Shared Sub CompressFile(sourceFile As String, destFile As String,
                                    Optional ByVal tipo As String = "gz")
 
@@ -913,7 +830,6 @@ Public Class Main
             Exit Function
         End If
 
-
         Dim OriginFolder = Directory.GetCurrentDirectory & "\Forge Tournaments Decks\" &
                            cmbformat.SelectedValue.ToString & "\" & cmbyear.SelectedValue.ToString
         Dim DestinyFolder = Directory.GetCurrentDirectory & "\Forge Gauntlets\" & cmbformat.SelectedValue.ToString & "\" & cmbyear.SelectedValue.ToString
@@ -941,52 +857,49 @@ Public Class Main
                     creategauntlet(MyDays, DestinyFolder & "\")
                 End If
 
-
             Next
         Next
     End Function
-
 
     Function ConvertDeckstoGauntlets2(OriginFolder2)
         Dim DestinyFolder = Directory.GetCurrentDirectory & "\Forge Gauntlets"
         creategauntlet(OriginFolder2, DestinyFolder & "\")
 
     End Function
+
     Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
-    renombarcarpetas
+        renombarcarpetas()
     End Sub
 
-    Sub renombarcarpetas
-            If cmbyear.SelectedValue.ToString = "all" Then
-            MsgBox("Select Year")
-            Exit Sub
-        End If
+    Sub renombarcarpetas()
+        'If cmbyear.SelectedValue.ToString = "all" Then
+        '    MsgBox("Select Year")
+        '    Exit Sub
+        'End If
 
+        'If _
+        '    MsgBox(
+        '        "Renaming folders! Warning! you need an update file unsupportedcards.txt with all cards unsupported by Forge to avoid unscripted cards in Forge. An outdate file may causes bad deck files.",
+        '        MsgBoxStyle.YesNo, "Warning!") = MsgBoxResult.Yes Then
+        '    If cmbformat.SelectedValue.ToString = "all" Then
+        '        For a = 0 To cmbformat.Items.Count - 1
+        '            If cmbformat.Items(a).value.ToString <> "all" Then
+        '                RenameFolder(cmbformat.Items(a).value.ToString)
+        '            End If
+        '        Next
+        '    Else
+        '        'ConvertJsonFilestoDck(cmbformat.SelectedItem.value.ToString)
+        '        RenameFolder(cmbformat.SelectedItem.value.ToString)
+        '    End If
 
-        If _
-            MsgBox(
-                "Renaming folders! Warning! you need an update file unsupportedcards.txt with all cards unsupported by Forge to avoid unscripted cards in Forge. An outdate file may causes bad deck files.",
-                MsgBoxStyle.YesNo, "Warning!") = MsgBoxResult.Yes Then
-            If cmbformat.SelectedValue.ToString = "all" Then
-                For a = 0 To cmbformat.Items.Count - 1
-                    If cmbformat.Items(a).value.ToString <> "all" Then
-                        RenameFolder(cmbformat.Items(a).value.ToString)
-                    End If
-                Next
-            Else
-                'ConvertJsonFilestoDck(cmbformat.SelectedItem.value.ToString)
-                RenameFolder(cmbformat.SelectedItem.value.ToString)
-            End If
-
-
-        End If
+        'End If
     End Sub
-    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+
+    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles btExtract.Click
         If cmbyear.SelectedValue.ToString = "all" Then
             MsgBox("Select Year")
             Exit Sub
         End If
-
 
         If _
             MsgBox(
@@ -1003,7 +916,7 @@ Public Class Main
 
             End If
 
-            renombarcarpetas
+            renombarcarpetas()
 
         End If
     End Sub
@@ -1017,12 +930,7 @@ Public Class Main
         Dim formato As String
         Dim myyear As String
 
-
-
-
-
         If cmbformat.SelectedValue.ToString = "all" Then
-
 
             For a = 0 To cmbformat.Items.Count - 1
                 If cmbformat.Items(a).value.ToString <> "all" Then
@@ -1106,7 +1014,6 @@ Public Class Main
                 OutputStream.Close()
                 Console.WriteLine("Files successfully compressed")
             End Using
-
         Catch ex As Exception
             Console.WriteLine("Exception during processing {0}", ex)
         End Try
@@ -1140,6 +1047,7 @@ Public Class Main
     End Sub
 
     Sub GenerateList(formato)
+
 
         Dim OriginFolder = Directory.GetCurrentDirectory & "\Forge Tournaments Decks Zipped"
         Dim DestinyFolder = Directory.GetCurrentDirectory & "\Forge Tournaments Decks Zipped"
@@ -1187,10 +1095,6 @@ Public Class Main
 
         End If
 
-
-
-
-
         For Each d In filenames
 
             Dim totaldecks = GetTotalDecks(d.ToString)
@@ -1198,28 +1102,11 @@ Public Class Main
             Dim MyName = d
             Dim exclude = False
 
-            'If MyName.Contains("-0-") Then
-            '    exclude = True
-            'End If
-
-            'If (MyName.Length - 2) = "-0" Then
-            '    exclude = True
-            'End If
-
-            'If exclude Then
-            '    Try
-            '        File.Delete(d)
-            '    Catch
-            '    End Try
-            'End If
 
             MyName = Replace(MyName, OriginFolder & "\" & formato & "\", "")
             MyName = Replace(MyName, ".zip", "")
             MyName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(MyName)
             MyName = MyName & " (" & totaldecks & " decks)"
-
-
-
 
             If totaldecks <> 0 Then
                 Dim comp = Split(MyName, "-")
@@ -1232,7 +1119,6 @@ Public Class Main
                 eltexto = Replace(eltexto, MyDate & "-", " ")
                 eltexto = Replace(eltexto, "-", " ")
                 MyName = MyDate & eltexto
-                'PROBLEMA EN EL FORGE, COMENTO MyName = Replace(MyName, "-", "/")
                 Dim ServerUrl As String = d
                 ServerUrl = Replace(ServerUrl, OriginFolder & "\" & formato & "\", "")
                 Dim a = MyName & " | https://downloads.cardforge.org/decks/archive/" & formato & "/" & ServerUrl & vbCrLf
@@ -1244,18 +1130,12 @@ Public Class Main
                     Dim hola = ""
 
                 End If
-
             Else
                 Dim hola = ""
 
             End If
 
         Next
-
-
-
-
-
 
         If IO.File.Exists(MyNameOfFile) Then
             Dim fileReader As String
@@ -1271,6 +1151,8 @@ Public Class Main
         WriteUserLog(MyNameOfFile & " done!" & vbCrLf)
     End Sub
 
+
+
     Public Shared Function GetTotalDecks(archivozip As String)
         Dim MyCount = 0
         Using zFile = New ZipFile(archivozip)
@@ -1282,7 +1164,6 @@ Public Class Main
         End Using
         Return MyCount
     End Function
-
 
     Sub searchforacard()
         'recorro todos los mazos de la categoria y año seleccionado y busco esa carta en el mazo
@@ -1328,8 +1209,6 @@ Public Class Main
 
                 Next fri
 
-
-
             Next
         Next
 
@@ -1357,10 +1236,11 @@ Public Class Main
 
     End Sub
 
-    Private Sub Button7_Click(sender As Object, e As EventArgs) 
+    Private Sub Button7_Click(sender As Object, e As EventArgs)
         For i = 1 To 10
-        MsgBox("hola!"& i)
-            Next
+            MsgBox("hola!" & i)
+        Next
 
     End Sub
+
 End Class

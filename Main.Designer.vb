@@ -24,7 +24,7 @@ Partial Class Main
     Private Sub InitializeComponent()
         Me.log = New System.Windows.Forms.TextBox()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
-        Me.Button3 = New System.Windows.Forms.Button()
+        Me.btExtract = New System.Windows.Forms.Button()
         Me.cmbformat = New System.Windows.Forms.ComboBox()
         Me.btnzipdecks = New System.Windows.Forms.Button()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
@@ -34,9 +34,9 @@ Partial Class Main
         Me.Label2 = New System.Windows.Forms.Label()
         Me.cmbyear = New System.Windows.Forms.ComboBox()
         Me.chkoverwrite = New System.Windows.Forms.CheckBox()
-        Me.Label3 = New System.Windows.Forms.Label()
         Me.cmbcategories = New System.Windows.Forms.ComboBox()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.cmbmonth = New System.Windows.Forms.ComboBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
@@ -53,40 +53,40 @@ Partial Class Main
         Me.Label5 = New System.Windows.Forms.Label()
         Me.txreplace = New System.Windows.Forms.TextBox()
         Me.Label4 = New System.Windows.Forms.Label()
-        Me.MenuStrip1.SuspendLayout
-        Me.GroupBox1.SuspendLayout
-        Me.TabControl1.SuspendLayout
-        Me.TabPage1.SuspendLayout
-        Me.TabPage3.SuspendLayout
-        Me.TabPage4.SuspendLayout
-        Me.TabPage2.SuspendLayout
-        Me.SuspendLayout
+        Me.MenuStrip1.SuspendLayout()
+        Me.GroupBox1.SuspendLayout()
+        Me.TabControl1.SuspendLayout()
+        Me.TabPage1.SuspendLayout()
+        Me.TabPage3.SuspendLayout()
+        Me.TabPage4.SuspendLayout()
+        Me.TabPage2.SuspendLayout()
+        Me.SuspendLayout()
         '
         'log
         '
-        Me.log.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.log.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.log.Location = New System.Drawing.Point(12, 189)
         Me.log.Margin = New System.Windows.Forms.Padding(2)
-        Me.log.Multiline = true
+        Me.log.Multiline = True
         Me.log.Name = "log"
-        Me.log.ReadOnly = true
+        Me.log.ReadOnly = True
         Me.log.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.log.Size = New System.Drawing.Size(647, 371)
         Me.log.TabIndex = 25
         '
-        'Button3
+        'btExtract
         '
-        Me.Button3.Location = New System.Drawing.Point(170, 28)
-        Me.Button3.Margin = New System.Windows.Forms.Padding(2)
-        Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(317, 24)
-        Me.Button3.TabIndex = 32
-        Me.Button3.Text = "Extract Decks"
-        Me.Button3.UseVisualStyleBackColor = true
+        Me.btExtract.Location = New System.Drawing.Point(170, 28)
+        Me.btExtract.Margin = New System.Windows.Forms.Padding(2)
+        Me.btExtract.Name = "btExtract"
+        Me.btExtract.Size = New System.Drawing.Size(317, 24)
+        Me.btExtract.TabIndex = 32
+        Me.btExtract.Text = "Extract Decks"
+        Me.btExtract.UseVisualStyleBackColor = True
         '
         'cmbformat
         '
-        Me.cmbformat.FormattingEnabled = true
+        Me.cmbformat.FormattingEnabled = True
         Me.cmbformat.Location = New System.Drawing.Point(252, 18)
         Me.cmbformat.Margin = New System.Windows.Forms.Padding(2)
         Me.cmbformat.Name = "cmbformat"
@@ -101,7 +101,7 @@ Partial Class Main
         Me.btnzipdecks.Size = New System.Drawing.Size(138, 24)
         Me.btnzipdecks.TabIndex = 34
         Me.btnzipdecks.Text = "Zip Decks"
-        Me.btnzipdecks.UseVisualStyleBackColor = true
+        Me.btnzipdecks.UseVisualStyleBackColor = True
         '
         'MenuStrip1
         '
@@ -135,11 +135,11 @@ Partial Class Main
         Me.Button2.Size = New System.Drawing.Size(148, 24)
         Me.Button2.TabIndex = 37
         Me.Button2.Text = "Generate list.txt"
-        Me.Button2.UseVisualStyleBackColor = true
+        Me.Button2.UseVisualStyleBackColor = True
         '
         'Label2
         '
-        Me.Label2.AutoSize = true
+        Me.Label2.AutoSize = True
         Me.Label2.Location = New System.Drawing.Point(208, 20)
         Me.Label2.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label2.Name = "Label2"
@@ -149,38 +149,28 @@ Partial Class Main
         '
         'cmbyear
         '
-        Me.cmbyear.FormattingEnabled = true
+        Me.cmbyear.FormattingEnabled = True
         Me.cmbyear.Items.AddRange(New Object() {"standard", "modern", "vintage", "legacy", "pauper", "pioneer"})
-        Me.cmbyear.Location = New System.Drawing.Point(400, 18)
+        Me.cmbyear.Location = New System.Drawing.Point(443, 18)
         Me.cmbyear.Margin = New System.Windows.Forms.Padding(2)
         Me.cmbyear.Name = "cmbyear"
-        Me.cmbyear.Size = New System.Drawing.Size(92, 21)
+        Me.cmbyear.Size = New System.Drawing.Size(49, 21)
         Me.cmbyear.TabIndex = 39
         '
         'chkoverwrite
         '
-        Me.chkoverwrite.AutoSize = true
+        Me.chkoverwrite.AutoSize = True
         Me.chkoverwrite.Location = New System.Drawing.Point(509, 20)
         Me.chkoverwrite.Margin = New System.Windows.Forms.Padding(2)
         Me.chkoverwrite.Name = "chkoverwrite"
         Me.chkoverwrite.Size = New System.Drawing.Size(129, 17)
         Me.chkoverwrite.TabIndex = 41
         Me.chkoverwrite.Text = "Overwrite files if exists"
-        Me.chkoverwrite.UseVisualStyleBackColor = true
-        '
-        'Label3
-        '
-        Me.Label3.AutoSize = true
-        Me.Label3.Location = New System.Drawing.Point(367, 20)
-        Me.Label3.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(29, 13)
-        Me.Label3.TabIndex = 40
-        Me.Label3.Text = "Year"
+        Me.chkoverwrite.UseVisualStyleBackColor = True
         '
         'cmbcategories
         '
-        Me.cmbcategories.FormattingEnabled = true
+        Me.cmbcategories.FormattingEnabled = True
         Me.cmbcategories.Location = New System.Drawing.Point(48, 17)
         Me.cmbcategories.Margin = New System.Windows.Forms.Padding(2)
         Me.cmbcategories.Name = "cmbcategories"
@@ -189,12 +179,12 @@ Partial Class Main
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.cmbmonth)
         Me.GroupBox1.Controls.Add(Me.Label7)
         Me.GroupBox1.Controls.Add(Me.chkoverwrite)
         Me.GroupBox1.Controls.Add(Me.cmbyear)
         Me.GroupBox1.Controls.Add(Me.cmbformat)
         Me.GroupBox1.Controls.Add(Me.Label2)
-        Me.GroupBox1.Controls.Add(Me.Label3)
         Me.GroupBox1.Controls.Add(Me.cmbcategories)
         Me.GroupBox1.Location = New System.Drawing.Point(9, 25)
         Me.GroupBox1.Margin = New System.Windows.Forms.Padding(2)
@@ -202,12 +192,22 @@ Partial Class Main
         Me.GroupBox1.Padding = New System.Windows.Forms.Padding(2)
         Me.GroupBox1.Size = New System.Drawing.Size(649, 50)
         Me.GroupBox1.TabIndex = 51
-        Me.GroupBox1.TabStop = false
+        Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Filter"
+        '
+        'cmbmonth
+        '
+        Me.cmbmonth.FormattingEnabled = True
+        Me.cmbmonth.Items.AddRange(New Object() {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"})
+        Me.cmbmonth.Location = New System.Drawing.Point(392, 18)
+        Me.cmbmonth.Margin = New System.Windows.Forms.Padding(2)
+        Me.cmbmonth.Name = "cmbmonth"
+        Me.cmbmonth.Size = New System.Drawing.Size(47, 21)
+        Me.cmbmonth.TabIndex = 44
         '
         'Label7
         '
-        Me.Label7.AutoSize = true
+        Me.Label7.AutoSize = True
         Me.Label7.Location = New System.Drawing.Point(7, 20)
         Me.Label7.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label7.Name = "Label7"
@@ -231,7 +231,7 @@ Partial Class Main
         'TabPage1
         '
         Me.TabPage1.BackColor = System.Drawing.Color.WhiteSmoke
-        Me.TabPage1.Controls.Add(Me.Button3)
+        Me.TabPage1.Controls.Add(Me.btExtract)
         Me.TabPage1.Location = New System.Drawing.Point(4, 22)
         Me.TabPage1.Margin = New System.Windows.Forms.Padding(2)
         Me.TabPage1.Name = "TabPage1"
@@ -262,7 +262,7 @@ Partial Class Main
         Me.Button6.Size = New System.Drawing.Size(109, 24)
         Me.Button6.TabIndex = 38
         Me.Button6.Text = "Rename Folders"
-        Me.Button6.UseVisualStyleBackColor = true
+        Me.Button6.UseVisualStyleBackColor = True
         '
         'TabPage4
         '
@@ -281,7 +281,7 @@ Partial Class Main
         '
         'Label6
         '
-        Me.Label6.AutoSize = true
+        Me.Label6.AutoSize = True
         Me.Label6.Location = New System.Drawing.Point(206, 32)
         Me.Label6.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label6.Name = "Label6"
@@ -297,7 +297,7 @@ Partial Class Main
         Me.Button1.Size = New System.Drawing.Size(163, 24)
         Me.Button1.TabIndex = 51
         Me.Button1.Text = "Create Gauntlets with Decks"
-        Me.Button1.UseVisualStyleBackColor = true
+        Me.Button1.UseVisualStyleBackColor = True
         '
         'Button4
         '
@@ -307,7 +307,7 @@ Partial Class Main
         Me.Button4.Size = New System.Drawing.Size(163, 24)
         Me.Button4.TabIndex = 52
         Me.Button4.Text = "Create Gauntlets with a folder"
-        Me.Button4.UseVisualStyleBackColor = true
+        Me.Button4.UseVisualStyleBackColor = True
         '
         'txfolder
         '
@@ -341,7 +341,7 @@ Partial Class Main
         Me.Button5.Size = New System.Drawing.Size(163, 24)
         Me.Button5.TabIndex = 59
         Me.Button5.Text = "Find and Replace"
-        Me.Button5.UseVisualStyleBackColor = true
+        Me.Button5.UseVisualStyleBackColor = True
         '
         'txfind
         '
@@ -353,7 +353,7 @@ Partial Class Main
         '
         'Label5
         '
-        Me.Label5.AutoSize = true
+        Me.Label5.AutoSize = True
         Me.Label5.Location = New System.Drawing.Point(224, 17)
         Me.Label5.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label5.Name = "Label5"
@@ -372,7 +372,7 @@ Partial Class Main
         '
         'Label4
         '
-        Me.Label4.AutoSize = true
+        Me.Label4.AutoSize = True
         Me.Label4.Location = New System.Drawing.Point(14, 17)
         Me.Label4.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label4.Name = "Label4"
@@ -410,7 +410,7 @@ Partial Class Main
 End Sub
     Friend WithEvents log As TextBox
     Friend WithEvents FolderBrowserDialog1 As FolderBrowserDialog
-    Friend WithEvents Button3 As Button
+    Friend WithEvents btExtract As Button
     Friend WithEvents cmbformat As ComboBox
     Friend WithEvents btnzipdecks As Button
     Friend WithEvents MenuStrip1 As MenuStrip
@@ -420,7 +420,6 @@ End Sub
     Friend WithEvents Label2 As Label
     Friend WithEvents cmbyear As ComboBox
     Friend WithEvents chkoverwrite As CheckBox
-    Friend WithEvents Label3 As Label
     Friend WithEvents cmbcategories As ComboBox
     Friend WithEvents txfind As TextBox
     Friend WithEvents txreplace As TextBox
@@ -440,4 +439,5 @@ End Sub
     Friend WithEvents Button4 As Button
     Friend WithEvents txfolder As TextBox
     Friend WithEvents Button6 As Button
+    Friend WithEvents cmbmonth As ComboBox
 End Class
